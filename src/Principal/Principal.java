@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.servlet.RequestDispatcher;
@@ -39,25 +40,41 @@ public class Principal extends HttpServlet {
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		cargar();
+		
         PrintWriter out = response.getWriter();
 		Boolean esAjax;
         esAjax="XMLHttpRequest".equalsIgnoreCase(request.getHeader("X-Requested-With")); // Cabecera X-Requested-With
         if (esAjax) {
             // Comprobar si el usuario es válido
             String isbn=request.getParameter("isbn");
+            String todo=request.getParameter("todo");
+            String borrar=request.getParameter("borrar");
+            
+//          aqui mostramos todas las listas
+            if(todo!=null && todo.equals("true")) {
+            	out.println(concatenar());
+            }
+            
+//          Aqui muestra el que se busca
             if(isbn!=null && isbn!="") {
-            	System.out.println("Entro bien");
             	if(biblioteca.containsKey(isbn)) {
             		Libro li1=biblioteca.get(isbn);
             		out.println(concatenar(li1));
             	}else {
-            		out.println("");
+            		out.println(",,,");
             	}
-            	
             }
-            out.println("");
+            
+//          borramos el libro
+            if(borrar!=null && borrar!="") {
+            	if(biblioteca.containsKey(borrar)) {
+            		biblioteca.remove(borrar);
+            		out.println(concatenar());
+            	}
+            }
+            
         }else {
+        	cargar();
     		request.setAttribute("lista", biblioteca);
     		
     		
@@ -74,8 +91,18 @@ public class Principal extends HttpServlet {
 	
 	
 	private String concatenar(Libro lib) {	
-		System.out.println("Hago bien el proceso de concat");
 		return lib.getIsbn()+","+lib.getAutor()+","+lib.getTitulo()+","+lib.getAnio();
+	}
+	
+	private String concatenar() {
+		String resultado="";
+		for (Entry<String, Libro> libro : biblioteca.entrySet()){
+			String clave = libro.getKey();
+			Libro lib=biblioteca.get(clave);
+			resultado+=lib.getIsbn()+","+lib.getAutor()+","+lib.getTitulo()+","+lib.getAnio()+";";
+		}
+		
+		return resultado;
 	}
 
 }
