@@ -46,7 +46,16 @@ public class Principal extends HttpServlet {
         if (esAjax) {
             // Comprobar si el usuario es válido
             String isbn=request.getParameter("isbn");
-            System.out.println("hola");
+            if(isbn!=null && isbn!="") {
+            	System.out.println("Entro bien");
+            	if(biblioteca.containsKey(isbn)) {
+            		Libro li1=biblioteca.get(isbn);
+            		out.println(concatenar(li1));
+            	}else {
+            		out.println("");
+            	}
+            	
+            }
             out.println("");
         }else {
     		request.setAttribute("lista", biblioteca);
@@ -61,6 +70,12 @@ public class Principal extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		doGet(request, response);
+	}
+	
+	
+	private String concatenar(Libro lib) {	
+		System.out.println("Hago bien el proceso de concat");
+		return lib.getIsbn()+","+lib.getAutor()+","+lib.getTitulo()+","+lib.getAnio();
 	}
 
 }
