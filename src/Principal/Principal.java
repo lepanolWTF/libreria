@@ -49,6 +49,7 @@ public class Principal extends HttpServlet {
             String isbn=request.getParameter("isbn");
             String todo=request.getParameter("todo");
             String borrar=request.getParameter("borrar");
+            String anadir=request.getParameter("anadir");
             
 //          aqui mostramos todas las listas
             if(todo!=null && todo.equals("true")) {
@@ -73,10 +74,18 @@ public class Principal extends HttpServlet {
             	}
             }
             
+//          añadimos el libro
+            if(anadir!=null && anadir!="") {
+            	if(!biblioteca.containsKey(anadir)) {
+            		String[] datos=anadir.split(",");
+            		biblioteca.put(datos[0],new Libro(datos[0],datos[1], datos[2],datos[3]));
+            		out.println(concatenar());
+            	}
+            }
+            
         }else {
         	cargar();
     		request.setAttribute("lista", biblioteca);
-    		
     		
     		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(vista);
             dispatcher.forward(request, response); 

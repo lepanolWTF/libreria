@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <title>Biblioteca</title>
 <style type="text/css">
-table{border-collapse:collapse;margin: 0 auto;}
+table{border-collapse:collapse;margin: 0 auto; width:98%;}
 table,tr,td{border: 1px solid black;}
 td{width: 10em; text-align: center;}
 .tipo1{background: white;}
@@ -49,7 +49,7 @@ td{width: 10em; text-align: center;}
   overflow: hidden;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
-  width:34%;
+  
   margin: 0 auto;
 }
 
@@ -81,7 +81,7 @@ td{width: 10em; text-align: center;}
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
-  width:32.8%;
+  
   margin: 0 auto;
 }
 /*--------------------------------------*/
@@ -152,6 +152,28 @@ td{width: 10em; text-align: center;}
 	function eliminarLibro(){
 		borrar();
 		var datos = 'borrar=' + document.getElementById("borrarIsbn").value;
+	    var xmlhttp;  // objeto XMLHttpRequest
+	    if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	        xmlhttp = new XMLHttpRequest();
+	    } else {  // para IE6, IE5
+	        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	    }
+	    xmlhttp.onreadystatechange = function() {
+	    // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            respuesta=respuesta.split(";");
+				rellenarTabla(respuesta);
+	        }
+		}
+		xmlhttp.open("GET","Principal?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		xmlhttp.send();  // lanza la solicitud
+	}
+	
+	function anadirLibro(){
+		borrar();
+		var datos = 'anadir=' + document.getElementById("anadirIsbn").value +","+ document.getElementById("anadirAutor").value+","+ document.getElementById("anadirTitulo").value+","+ document.getElementById("anadirAnio").value;
 	    var xmlhttp;  // objeto XMLHttpRequest
 	    if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
 	        xmlhttp = new XMLHttpRequest();
@@ -254,10 +276,18 @@ td{width: 10em; text-align: center;}
 		document.getElementById("borrarlibro").addEventListener("click", function(event){
 		    event.preventDefault()
 		});
+		document.getElementById("anadirLibro").addEventListener("click", function(event){
+		    event.preventDefault()
+		});
 	</script>
 	<div id="anadir" class="tabcontent">
 		  <h3>Añadir</h3>
-		  
+		  ISBN <input type="text" id="anadirIsbn">
+		  Autor <input type="text" id="anadirAutor"><br/>
+		  Título <input type="text" id="anadirTitulo">
+		  Año <input type="text" id="anadirAnio">
+		  <br/>
+		  <button id="anadirLibro" onclick="anadirLibro()">Añadir libro</button>
 	</div>
 	<div id="modificar" class="tabcontent">
 		  <h3>Modificar</h3>
