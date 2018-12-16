@@ -16,32 +16,6 @@ td{width: 10em; text-align: center;}
 .libros{}
 
 
-/*DESPLEGABLES acordeon*/
-/*.accordion {
-  background-color: #eee;
-  color: #444;
-  cursor: pointer;
-  padding: 18px;
-  width: 40%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-  transition: 0.4s;
-}*/
-
-.active, .accordion:hover {
-  background-color: #ccc; 
-}
-
-.panel {
-  padding: 0 18px;
-  display: none;
-  background-color: white;
-  overflow: hidden;
-}
-/*------------------------------------*/
-
 /*---------tablas----------*/
 
 /* Style the tab */
@@ -88,11 +62,6 @@ td{width: 10em; text-align: center;}
 </style>
 <script type="text/javascript">
 	function recuperaPorIsbn() {
-	    // se genera la query_string
-	    borrar();
-	    
-	    
-	    /**alert("Datos a enviar: " + datos);**/
 		if(document.getElementById("porIsbn").value==""){
 			var datos = 'todo=' + "true";
 		    var xmlhttp;  // objeto XMLHttpRequest
@@ -150,7 +119,7 @@ td{width: 10em; text-align: center;}
 	}
 	
 	function eliminarLibro(){
-		borrar();
+		
 		var datos = 'borrar=' + document.getElementById("borrarIsbn").value;
 	    var xmlhttp;  // objeto XMLHttpRequest
 	    if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
@@ -172,7 +141,6 @@ td{width: 10em; text-align: center;}
 	}
 	
 	function anadirLibro(){
-		borrar();
 		var datos = 'anadir=' + document.getElementById("anadirIsbn").value +","+ document.getElementById("anadirAutor").value+","+ document.getElementById("anadirTitulo").value+","+ document.getElementById("anadirAnio").value;
 	    var xmlhttp;  // objeto XMLHttpRequest
 	    if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
@@ -184,8 +152,74 @@ td{width: 10em; text-align: center;}
 	    // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
 	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 	            var respuesta = xmlhttp.responseText;
-	            respuesta=respuesta.split(";");
-				rellenarTabla(respuesta);
+	            if(respuesta.length>1){
+	            	document.getElementById("anadirIsbn").style.background="white";
+		            respuesta=respuesta.split(";");
+					rellenarTabla(respuesta);
+					document.getElementById("anadirIsbn").value="";
+					document.getElementById("anadirAutor").value="";
+ 					document.getElementById("anadirTitulo").value="";
+					document.getElementById("anadirAnio").value="";
+					
+	            }else{
+	            	alert("Error, ese isbn ya existe");
+	            	document.getElementById("anadirIsbn").style.background="red";
+	            }
+	        }
+		}
+		xmlhttp.open("GET","Principal?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		xmlhttp.send();  // lanza la solicitud
+	}
+	
+	function editarLibro(){
+		var datos = 'editar=' + document.getElementById("editarIsbn").value +","+ document.getElementById("editarAutor").value+","+ document.getElementById("editarTitulo").value+","+ document.getElementById("editarAnio").value;
+	    var xmlhttp;  // objeto XMLHttpRequest
+	    if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	        xmlhttp = new XMLHttpRequest();
+	    } else {  // para IE6, IE5
+	        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	    }
+	    xmlhttp.onreadystatechange = function() {
+	    // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            if(respuesta.length>1){
+	            	document.getElementById("anadirIsbn").style.background="white";
+		            respuesta=respuesta.split(";");
+					rellenarTabla(respuesta);
+					document.getElementById("editarIsbn").value="";
+					document.getElementById("editarAutor").value="";
+ 					document.getElementById("editarTitulo").value="";
+					document.getElementById("editarAnio").value="";
+					
+	            }else{
+	            	alert("Error, ese isbn no existe");
+	            	document.getElementById("anadirIsbn").style.background="red";
+	            }
+	        }
+		}
+		xmlhttp.open("GET","Principal?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
+		xmlhttp.setRequestHeader("X-Requested-With", "xmlhttprequest");  // establece la cabecera HTTP necesaria
+		xmlhttp.send();  // lanza la solicitud
+	}
+	
+	function rellenarFormEditaro(){
+		var datos = 'isbn=' + document.getElementById("editarIsbn").value;
+	    var xmlhttp;  // objeto XMLHttpRequest
+	    if (window.XMLHttpRequest) {  // para IE7+, Firefox, Chrome, Opera, Safari
+	        xmlhttp = new XMLHttpRequest();
+	    } else {  // para IE6, IE5
+	        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	    }
+	    xmlhttp.onreadystatechange = function() {
+	    // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
+	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+	            var respuesta = xmlhttp.responseText;
+	            respuesta=respuesta.split(",");
+				document.getElementById("editarAutor").value=respuesta[1];
+				document.getElementById("editarTitulo").value=respuesta[2];
+				document.getElementById("editarAnio").value=respuesta[3];
 	        }
 		}
 		xmlhttp.open("GET","Principal?" + datos ,true);  // crea la conexión con parámetros: método, url, asíncrono?
@@ -194,6 +228,7 @@ td{width: 10em; text-align: center;}
 	}
 	
 	function anadirTabla(respuesta){
+		borrar();
 		var table = document.getElementById("libros");
 		var row = table.insertRow(document.getElementById("libros").rows.length);
 		
@@ -210,6 +245,7 @@ td{width: 10em; text-align: center;}
 	}
 	
 	function rellenarTabla(respuesta){
+		borrar();
 		var table = document.getElementById("libros");
 		var tipo="tipo1";
 		
@@ -276,7 +312,7 @@ td{width: 10em; text-align: center;}
 		document.getElementById("borrarlibro").addEventListener("click", function(event){
 		    event.preventDefault()
 		});
-		document.getElementById("anadirLibro").addEventListener("click", function(event){
+		document.getElementById("anadirNuevoLibro").addEventListener("click", function(event){
 		    event.preventDefault()
 		});
 	</script>
@@ -287,11 +323,16 @@ td{width: 10em; text-align: center;}
 		  Título <input type="text" id="anadirTitulo">
 		  Año <input type="text" id="anadirAnio">
 		  <br/>
-		  <button id="anadirLibro" onclick="anadirLibro()">Añadir libro</button>
+		  <button id="anadirNuevoLibro" onclick="anadirLibro()">Añadir libro</button>
 	</div>
 	<div id="modificar" class="tabcontent">
 		  <h3>Modificar</h3>
-		  
+		  ISBN <input type="text" id="editarIsbn" onkeyup="rellenarFormEditaro()">
+		  Autor <input type="text" id="editarAutor"><br/>
+		  Título <input type="text" id="editarTitulo">
+		  Año <input type="text" id="editarAnio">
+		  <br/>
+		  <button id="editarNuevoLibro" onclick="editarLibro()">Editar libro</button>
 	</div>
 	
 	<script>

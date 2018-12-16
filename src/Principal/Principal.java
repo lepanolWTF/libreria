@@ -50,11 +50,13 @@ public class Principal extends HttpServlet {
             String todo=request.getParameter("todo");
             String borrar=request.getParameter("borrar");
             String anadir=request.getParameter("anadir");
+            String editar=request.getParameter("editar");
             
 //          aqui mostramos todas las listas
             if(todo!=null && todo.equals("true")) {
             	out.println(concatenar());
             }
+
             
 //          Aqui muestra el que se busca
             if(isbn!=null && isbn!="") {
@@ -76,10 +78,23 @@ public class Principal extends HttpServlet {
             
 //          añadimos el libro
             if(anadir!=null && anadir!="") {
-            	if(!biblioteca.containsKey(anadir)) {
-            		String[] datos=anadir.split(",");
+            	String[] datos=anadir.split(",");
+            	if(!biblioteca.containsKey(datos[0])) {
             		biblioteca.put(datos[0],new Libro(datos[0],datos[1], datos[2],datos[3]));
             		out.println(concatenar());
+            	}else {
+            		out.println("0");
+            	}
+            }
+            
+//          editamos el libro
+            if(editar!=null && editar!="") {
+            	String[] datos=editar.split(",");
+            	if(biblioteca.containsKey(datos[0])) {
+            		biblioteca.put(datos[0],new Libro(datos[0],datos[1], datos[2],datos[3]));
+            		out.println(concatenar());
+            	}else {
+            		out.println("0");
             	}
             }
             
