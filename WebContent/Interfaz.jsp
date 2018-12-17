@@ -174,7 +174,7 @@ input{
 	    // si el resultado está listo (readyState==4) y la respuesta es correcta (status==200)
 	        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 	            var respuesta = xmlhttp.responseText;
-	            if(respuesta.length>1){
+	            if(respuesta.length<=1){
 	            	document.getElementById("anadirIsbn").style.background="white";
 		            respuesta=respuesta.split(";");
 					rellenarTabla(respuesta);

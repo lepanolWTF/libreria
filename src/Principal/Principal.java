@@ -81,6 +81,9 @@ public class Principal extends HttpServlet {
 //          añadimos el libro
             if(anadir!=null && anadir!="") {
             	String[] datos=anadir.split(",");
+            	System.out.println(!biblioteca.containsKey(datos[0]));
+            	System.out.println(datos[0]);
+            	System.out.println(anadir);
             	if(!biblioteca.containsKey(datos[0])) {
             		biblioteca.put(datos[0],new Libro(datos[0],datos[1], datos[2],datos[3]));
             		out.println(concatenar());
