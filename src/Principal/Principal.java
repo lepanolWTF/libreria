@@ -73,6 +73,8 @@ public class Principal extends HttpServlet {
             	if(biblioteca.containsKey(borrar)) {
             		biblioteca.remove(borrar);
             		out.println(concatenar());
+            	}else {
+            		out.println(concatenar());
             	}
             }
             

@@ -8,12 +8,33 @@
 <meta charset="UTF-8">
 <title>Biblioteca</title>
 <style type="text/css">
-table{border-collapse:collapse;margin: 0 auto; width:98%;}
-table,tr,td{border: 1px solid black;}
-td{width: 10em; text-align: center;}
+.titulo {
+	width: 650px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	color: black;
+}
+#libros{border-collapse:collapse;margin: 0 auto; width:98%;}
+#libros,#libros tr,#libros td{border: 1px solid black;}
+#libros td{width: 10em; text-align: center;}
 .tipo1{background: white;}
-.tipo2{background: #a69490;}
+.tipo2{background: #cdf58c;}
+.tipo0{background: #a69490;}
 .libros{}
+input{   
+   background-color:#FFFFFF;
+   border:solid 2px #000000;
+   font-size:15px;
+   color:#000000;
+   -moz-border-radius:7px;
+   -webkit-border-radius:7px;
+   border-radius:7px;
+   padding-top:4px;
+   padding-bottom:4px;
+   padding-left:4px;
+   padding-right:4px;
+}
+
 
 
 /*---------tablas----------*/
@@ -108,6 +129,7 @@ td{width: 10em; text-align: center;}
 		
 		var table = document.getElementById("libros");
 		var row = table.insertRow(0);
+		row.className +=" tipo0";
 		var cell1 = row.insertCell(0);
 		var cell2 = row.insertCell(1);
 		var cell3 = row.insertCell(2);
@@ -273,9 +295,11 @@ td{width: 10em; text-align: center;}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 </head>
 <body>
-	<h1>Libros disponibles en la biblioteca</h1>
+	<div class="titulo">
+		<h1>Libros disponibles en la biblioteca</h1>
+	</div>
 	<table id="libros">
-		<tr>
+		<tr class="tipo0">
 			<td>Isbn</td><td>Autor</td><td>Título</td><td>Año</td>
 			<%Iterator it = biblioteca.keySet().iterator();
 			while(it.hasNext()){
@@ -318,21 +342,25 @@ td{width: 10em; text-align: center;}
 	</script>
 	<div id="anadir" class="tabcontent">
 		  <h3>Añadir</h3>
-		  ISBN <input type="text" id="anadirIsbn">
-		  Autor <input type="text" id="anadirAutor"><br/>
-		  Título <input type="text" id="anadirTitulo">
-		  Año <input type="text" id="anadirAnio">
+		  <table>
+		  <tr><td>ISBN</td><td><input type="text" id="anadirIsbn"></td>
+		  <td>Autor</td><td><input type="text" id="anadirAutor"></td></tr>
+		  <tr><td>Título</td><td><input type="text" id="anadirTitulo">
+		  <td>Año</td><td><input type="text" id="anadirAnio"></td></tr>
+		  </table>
 		  <br/>
 		  <button id="anadirNuevoLibro" onclick="anadirLibro()">Añadir libro</button>
 	</div>
 	<div id="modificar" class="tabcontent">
 		  <h3>Modificar</h3>
-		  ISBN <input type="text" id="editarIsbn" onkeyup="rellenarFormEditaro()">
-		  Autor <input type="text" id="editarAutor"><br/>
-		  Título <input type="text" id="editarTitulo">
-		  Año <input type="text" id="editarAnio">
+		  <table>
+		  <tr><td>ISBN</td><td><input type="text" id="editarIsbn" onkeyup="rellenarFormEditaro()"></td>
+		  <td>Autor</td><td><input type="text" id="editarAutor"></td></tr>
+		  <tr><td>Título</td><td><input type="text" id="editarTitulo"></td>
+		  <td>Año</td><td><input type="text" id="editarAnio"></td></tr>
+		  </table>
 		  <br/>
-		  <button id="editarNuevoLibro" onclick="editarLibro()">Editar libro</button>
+		  <button id="editarLibro" onclick="editarLibro()">Editar libro</button>
 	</div>
 	
 	<script>
